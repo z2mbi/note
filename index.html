@@ -86,7 +86,6 @@
       backdrop-filter: blur(3px);
     }
 
-    /* Estilos del botón y mensaje */
     .button-container {
       margin-top: 20px;
       z-index: 2;
@@ -102,6 +101,7 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
+
     #magicBtn:hover {
       transform: scale(1.1);
     }
@@ -163,7 +163,7 @@
           x: x,
           y: y,
           radius: Math.random() * 5,
-          color: hsl(${Math.random() * 360}, 100%, 60%),
+          color: `hsl(${Math.random() * 360}, 100%, 60%)`,
           velocity: {
             x: (Math.random() - 0.5) * 5,
             y: (Math.random() - 0.5) * 5
@@ -194,7 +194,13 @@
 
     document.getElementById('magicBtn').addEventListener('click', () => {
       createParticles(window.innerWidth / 2, window.innerHeight / 2);
-      document.getElementById('finalMessage').style.opacity = 1;
+      const mensaje = document.getElementById('finalMessage');
+      mensaje.style.opacity = 1;
+
+      // Si quieres que desaparezca después de 5 segundos, descomenta esto:
+      // setTimeout(() => {
+      //   mensaje.style.opacity = 0;
+      // }, 5000);
     });
 
     window.addEventListener('resize', () => {
