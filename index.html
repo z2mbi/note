@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bienvenida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
+      font-family: 'Quicksand', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      color: #3e4e5e;
+      margin-bottom: 0.2em;
+      text-align: center;
+      animation: slideDown 1.5s ease-out;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #6b4f3b;
+      max-width: 600px;
+      text-align: center;
+      animation: fadeInText 2.5s ease-in;
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 200px;
+      background: url('https://svgshare.com/i/uJv.svg') repeat-x;
+      animation: waveMove 10s linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes waveMove {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 1000px; }
+    }
+
+    audio {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(3px);
+    }
+
+    /* Estilos del botón y mensaje */
+    .button-container {
+      margin-top: 20px;
+      z-index: 2;
+    }
+
+    #magicBtn {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background: #ff6f91;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #magicBtn:hover {
+      transform: scale(1.1);
+    }
+
+    #explosionCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #finalMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      color: #ffb400;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      opacity: 0;
+      transition: opacity 2s ease-in;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <h1>Bienvenida</h1>
+    <p>Una página pensada para ti, con calma, elegancia y un toque de magia. Que cada palabra aquí te abrace como lo haría tu libro favorito.</p>
+    <div class="button-container">
+      <button id="magicBtn">Haz clic aquí</button>
+    </div>
+  </div>
+  <div class="wave"></div>
+  <canvas id="explosionCanvas"></canvas>
+  <div id="finalMessage">You are a sunflower 🌻</div>
+
+  <audio autoplay loop>
+    <source src="https://example.com/tiroteo.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+  </audio>
+
+  <script>
+    const canvas = document.getElementById('explosionCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function createParticles(x, y) {
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          radius: Math.random() * 5,
+          color: hsl(${Math.random() * 360}, 100%, 60%),
+          velocity: {
+            x: (Math.random() - 0.5) * 5,
+            y: (Math.random() - 0.5) * 5
+          },
+          alpha: 1
+        });
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.velocity.x;
+        p.y += p.velocity.y;
+        p.alpha -= 0.01;
+        if (p.alpha <= 0) particles.splice(i, 1);
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    document.getElementById('magicBtn').addEventListener('click', () => {
+      createParticles(window.innerWidth / 2, window.innerHeight / 2);
+      document.getElementById('finalMessage').style.opacity = 1;
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
