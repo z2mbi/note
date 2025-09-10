@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bienvenida</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -96,14 +96,16 @@
       font-size: 1.2em;
       border: none;
       border-radius: 10px;
-      background: #ff6f91;
+      background: linear-gradient(45deg, #ff6f91, #ffc3a0);
       color: white;
       cursor: pointer;
-      transition: transform 0.2s;
+      box-shadow: 0 0 15px rgba(255, 111, 145, 0.6);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     #magicBtn:hover {
       transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 111, 145, 0.9);
     }
 
     #explosionCanvas {
@@ -121,13 +123,15 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'Playfair Display', serif;
-      font-size: 3em;
-      color: #ffb400;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8em;
+      color: #ff6f91;
+      text-align: center;
       text-shadow: 0 0 10px rgba(255,255,255,0.8);
       opacity: 0;
       transition: opacity 2s ease-in;
       z-index: 3;
+      max-width: 80%;
     }
   </style>
 </head>
@@ -137,12 +141,12 @@
     <h1>Bienvenida</h1>
     <p>Una página pensada para ti, con calma, elegancia y un toque de magia. Que cada palabra aquí te abrace como lo haría tu libro favorito.</p>
     <div class="button-container">
-      <button id="magicBtn">Haz clic aquí</button>
+      <button id="magicBtn">✨ Haz clic aquí</button>
     </div>
   </div>
   <div class="wave"></div>
   <canvas id="explosionCanvas"></canvas>
-  <div id="finalMessage">You are a sunflower 🌻</div>
+  <div id="finalMessage">Eres increíble, hermosa e inteligente. Lo supe desde que te vi.</div>
 
   <audio autoplay loop>
     <source src="https://example.com/tiroteo.mp3" type="audio/mpeg">
@@ -197,10 +201,9 @@
       const mensaje = document.getElementById('finalMessage');
       mensaje.style.opacity = 1;
 
-      // Si quieres que desaparezca después de 5 segundos, descomenta esto:
-      // setTimeout(() => {
-      //   mensaje.style.opacity = 0;
-      // }, 5000);
+      setTimeout(() => {
+        mensaje.style.opacity = 0;
+      }, 10000); // 10 segundos
     });
 
     window.addEventListener('resize', () => {
