@@ -1,267 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Perrito juguetón — Fondo interactivo</title>
-  <style>
-    /* --- Reset suave --- */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: #081c3a;
-      color: #dbeafe;
-      overflow: hidden;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Perrito al centro</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #081c3a;
+    overflow: hidden;
+  }
 
-    /* --- Fondo animado: azules con destellos rojizos-rosados --- */
-    .background {
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(1200px 800px at 10% 20%, rgba(23, 78, 166, 0.55), transparent 60%),
-        radial-gradient(900px 700px at 80% 30%, rgba(12, 58, 128, 0.6), transparent 65%),
-        radial-gradient(700px 600px at 40% 80%, rgba(18, 82, 158, 0.5), transparent 65%),
-        radial-gradient(600px 500px at 70% 70%, rgba(255, 95, 109, 0.08), transparent 70%),
-        radial-gradient(500px 400px at 25% 55%, rgba(255, 156, 187, 0.06), transparent 75%),
-        linear-gradient(180deg, #0a1e3f 0%, #06142b 100%);
-      filter: saturate(1.05) contrast(1.02);
-      animation: drift 22s ease-in-out infinite alternate;
-    }
+  /* Fondo azules + destellos */
+  .background {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(1200px 800px at 10% 20%, rgba(23, 78, 166, 0.55), transparent 60%),
+      radial-gradient(900px 700px at 80% 30%, rgba(12, 58, 128, 0.6), transparent 65%),
+      radial-gradient(700px 600px at 40% 80%, rgba(18, 82, 158, 0.5), transparent 65%),
+      radial-gradient(600px 500px at 70% 70%, rgba(255, 95, 109, 0.08), transparent 70%),
+      radial-gradient(500px 400px at 25% 55%, rgba(255, 156, 187, 0.06), transparent 75%),
+      linear-gradient(180deg, #0a1e3f 0%, #06142b 100%);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-2%); }
+  }
 
-    /* Sutiles “chispas” rojizas/rosadas */
-    .twinkles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(3px 3px at 20% 40%, rgba(255,105,135,0.35), transparent 50%),
-        radial-gradient(2px 2px at 35% 25%, rgba(255,155,175,0.3), transparent 50%),
-        radial-gradient(2px 2px at 60% 55%, rgba(255,135,155,0.28), transparent 50%),
-        radial-gradient(3px 3px at 75% 35%, rgba(255,120,150,0.32), transparent 50%),
-        radial-gradient(2px 2px at 50% 75%, rgba(255,150,170,0.3), transparent 50%);
-      animation: twinkle 5.6s ease-in-out infinite;
-      mix-blend-mode: screen;
-    }
+  .twinkles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(3px 3px at 20% 40%, rgba(255,105,135,0.35), transparent 50%),
+      radial-gradient(2px 2px at 35% 25%, rgba(255,155,175,0.3), transparent 50%),
+      radial-gradient(2px 2px at 60% 55%, rgba(255,135,155,0.28), transparent 50%),
+      radial-gradient(3px 3px at 75% 35%, rgba(255,120,150,0.32), transparent 50%),
+      radial-gradient(2px 2px at 50% 75%, rgba(255,150,170,0.3), transparent 50%);
+    animation: twinkle 5.6s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.6; }
+  }
 
-    @keyframes drift {
-      0%   { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(0, -2%, 0) scale(1.02); }
-    }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.35; filter: blur(0.2px); }
-      50%      { opacity: 0.6;  filter: blur(0.6px); }
-    }
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 
-    /* --- Contenedor principal --- */
-    .stage {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      isolation: isolate;
-    }
+  .dog {
+    position: absolute;
+    font-size: clamp(40px, 8vmin, 80px);
+    left: -10%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+    animation: wagTail 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes wagTail {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(4deg); }
+  }
 
-    /* --- Perrito emoji --- */
-    .dog {
-      position: absolute;
-      left: -10vmin; /* empieza fuera de pantalla a la izquierda */
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-size: clamp(32px, 6vmin, 64px);
-      line-height: 1;
-      user-select: none;
-      will-change: transform, left, top;
-      text-shadow:
-        0 0 0.5px rgba(255,255,255,0.2),
-        0 0 6px rgba(255,255,255,0.06);
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-    }
+  .thought {
+    position: absolute;
+    background: rgba(245, 248, 255, 0.9);
+    color: #0a1a33;
+    padding: 0.5rem 0.7rem;
+    border-radius: 12px;
+    border: 1px solid rgba(10, 26, 51, 0.35);
+    font-size: clamp(12px, 2.8vmin, 16px);
+    box-shadow: 0 1px 0.5px rgba(255,255,255,0.35) inset,
+                0 6px 18px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms ease;
+    cursor: pointer;
+  }
+  .thought.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-    /* --- Globo de pensamiento "(tócame)" --- */
-    .thought {
-      position: absolute;
-      transform: translate(-50%, -120%);
-      background: rgba(245, 248, 255, 0.9);
-      color: #0a1a33;
-      padding: 0.5rem 0.7rem;
-      border-radius: 12px;
-      border: 1px solid rgba(10, 26, 51, 0.35); /* borde fino */
-      font-size: clamp(12px, 2.8vmin, 16px);
-      box-shadow:
-        0 1px 0.5px rgba(255,255,255,0.35) inset,
-        0 6px 18px rgba(0, 0, 0, 0.22);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 600ms ease, transform 600ms ease;
-      cursor: pointer;
-    }
-    .thought::after,
-    .thought::before {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(245, 248, 255, 0.9);
-      border: 1px solid rgba(10, 26, 51, 0.25);
-    }
-    .thought::after {
-      width: 8px; height: 8px;
-      left: 12px; bottom: -10px;
-    }
-    .thought::before {
-      width: 5px; height: 5px;
-      left: 6px; bottom: -18px;
-    }
-    .thought.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -125%) scale(1.02);
-      animation: gentlePulse 2s ease-in-out infinite;
-    }
-    @keyframes gentlePulse {
-      0%,100% { box-shadow: 0 1px 0.5px rgba(255,255,255,0.35) inset, 0 6px 18px rgba(0,0,0,0.22); }
-      50%     { box-shadow: 0 1px 0.5px rgba(255,255,255,0.4) inset, 0 10px 26px rgba(0,0,0,0.28); }
-    }
-
-    /* --- Oscurecimiento tierno de pantalla --- */
-    .veil {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(120vmax 120vmax at 50% 50%, rgba(6, 12, 24, 0.0), rgba(0, 0, 0, 0.0) 60%, rgba(0, 0, 0, 0.0) 100%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 1800ms ease-in-out; /* lento y tierno */
-      z-index: 10;
-    }
-    .veil.dark {
-      opacity: 0.88; /* no totalmente negro, suave */
-      background: radial-gradient(160vmax 130vmax at 50% 55%, rgba(10, 18, 28, 0.15), rgba(4, 8, 16, 0.6) 40%, rgba(0, 0, 0, 0.92) 100%);
-    }
-
-    /* Accesibilidad: reducir movimiento si el usuario lo prefiere */
-    @media (prefers-reduced-motion: reduce) {
-      .background, .twinkles { animation: none; }
-      .thought { transition: opacity 300ms ease; }
-    }
-  </style>
+  .veil {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(160vmax 130vmax at 50% 55%, rgba(10, 18, 28, 0.15), rgba(4, 8, 16, 0.6) 40%, rgba(0, 0, 0, 0.92) 100%);
+    opacity: 0;
+    transition: opacity 1800ms ease-in-out;
+    z-index: 10;
+  }
+  .veil.dark {
+    opacity: 0.88;
+  }
+</style>
 </head>
 <body>
-  <div class="background" aria-hidden="true"></div>
-  <div class="twinkles" aria-hidden="true"></div>
+<div class="background"></div>
+<div class="twinkles"></div>
 
-  <main class="stage" aria-label="Escena con fondo y un perrito animado">
-    <span class="dog" id="dog" role="img" aria-label="perrito">🐶</span>
-    <button class="thought" id="thought" aria-label="Tócame para oscurecer la pantalla">(tócame)</button>
-  </main>
+<div class="stage">
+  <span class="dog" id="dog">🐶</span>
+  <button class="thought" id="thought">(tócame)</button>
+</div>
 
-  <div class="veil" id="veil" aria-hidden="true"></div>
+<div class="veil" id="veil"></div>
 
-  <script>
-    // Parámetros de animación
-    const dog = document.getElementById('dog');
-    const thought = document.getElementById('thought');
-    const veil = document.getElementById('veil');
+<script>
+const dog = document.getElementById('dog');
+const thought = document.getElementById('thought');
+const veil = document.getElementById('veil');
 
-    let startTime = null;
-    let showingThought = false;
-    let animationStarted = false;
+let startTime = null;
+const delay = 2000; // espera antes de iniciar
+const duration = 5000; // tiempo hasta el centro
 
-    // Configuración del recorrido: de izquierda a derecha con "vuelta de caracol" (espiral amortiguada)
-    const duration = 6500; // ms que tarda en cruzar
-    const delay = 2000;    // ms antes de comenzar (2 segundos, como pediste)
+function easeOutElastic(t) {
+  const c4 = (2 * Math.PI) / 3;
+  return t === 0 ? 0 :
+         t === 1 ? 1 :
+         Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+}
 
-    // Función de interpolación suave
-    function easeInOutCubic(t) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
+function animateDog(timestamp) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = timestamp - startTime;
 
-    // Animación cuadro a cuadro
-    function animateDog(timestamp) {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-
-      if (elapsed < delay) {
-        requestAnimationFrame(animateDog);
-        return;
-      }
-      if (!animationStarted) {
-        animationStarted = true;
-      }
-
-      const tRaw = Math.min((elapsed - delay) / duration, 1);
-      const t = easeInOutCubic(tRaw);
-
-      // Ancho y alto del viewport
-      const vw = Math.max(window.innerWidth, 1);
-      const vh = Math.max(window.innerHeight, 1);
-
-      // Posición X: de -10% (fuera) a 105% (sale un poco a la derecha)
-      const x = (-0.10 + 1.15 * t) * vw;
-
-      // Movimiento "vuelta de caracol" (espiral amortiguada):
-      // Un lazo principal + ondulación decreciente
-      const centerY = vh * 0.55;
-      const amplitude = Math.min(vh * 0.22, 180);
-      const loops = 1.25; // ~una vuelta y un cuarto
-      const spiral = Math.sin(loops * 2 * Math.PI * t) * amplitude * (1 - 0.75 * t);
-      const wobble = Math.sin(10 * Math.PI * t) * amplitude * 0.08 * (1 - t);
-      const y = centerY + spiral + wobble;
-
-      // Ligera rotación para el gesto juguetón
-      const rotate = Math.sin(6 * Math.PI * t) * 12 * (1 - 0.6 * t);
-
-      dog.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotate}deg)`;
-
-      // Mostrar el globo "(tócame)" antes de llegar a la derecha (entre 60% y 90%)
-      if (!showingThought && tRaw > 0.6 && tRaw < 0.9) {
-        showingThought = true;
-        // Posicionar el globo cerca del perrito
-        positionThoughtNearDog(x, y);
-        thought.classList.add('show');
-      }
-
-      // Seguir el perrito con el globo mientras se muestra
-      if (showingThought) {
-        positionThoughtNearDog(x, y);
-      }
-
-      if (tRaw < 1) {
-        requestAnimationFrame(animateDog);
-      } else {
-        // Al finalizar, ocultar el globo si no se tocó
-        if (thought.classList.contains('show')) {
-          thought.classList.remove('show');
-        }
-      }
-    }
-
-    function positionThoughtNearDog(x, y) {
-      // Desfase para ubicarse sobre el perrito con un pequeño offset
-      const offsetX = 24;
-      const offsetY = -40;
-      thought.style.left = `${x + offsetX}px`;
-      thought.style.top  = `${y + offsetY}px`;
-    }
-
-    // Interacción: al tocar/clic en "(tócame)", oscurecer suavemente toda la pantalla
-    function darkenScreen() {
-      veil.classList.add('dark');
-      veil.setAttribute('aria-hidden', 'false');
-      // Opcional: suavizar salida del globo
-      thought.classList.remove('show');
-    }
-
-    thought.addEventListener('click', darkenScreen, { passive: true });
-    thought.addEventListener('touchstart', darkenScreen, { passive: true });
-
-    // Iniciar animación
+  if (elapsed < delay) {
     requestAnimationFrame(animateDog);
+    return;
+  }
 
-    // Responsivo: reajustar posición del globo al cambiar tamaño
-    window.addEventListener('resize', () => {
-      // No reiniciamos animación; solo dejamos que el siguiente frame recalcule
-    });
-  </script>
+  const tRaw = Math.min((elapsed - delay) / duration, 1);
+  const t = easeOutElastic(tRaw);
+
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  const startX = -0.15 * vw;
+  const centerX = vw / 2;
+  const x = startX + (centerX - startX) * t;
+
+  const centerY = vh * 0.45;
+  const spiral = Math.sin(t * Math.PI * 4) * 40 * (1 - t);
+  const y = centerY + spiral;
+
+  dog.style.left = `${x}px`;
+  dog.style.top = `${y}px`;
+
+  if (tRaw >= 1) {
+    // Mostrar mensaje justo al llegar al centro
+    thought.style.left = `${centerX}px`;
+    thought.style.top = `${centerY - 80}px`;
+    thought.classList.add('show');
+  } else {
+    requestAnimationFrame(animateDog);
+  }
+}
+
+thought.addEventListener('click', () => {
+  veil.classList.add('dark');
+});
+
+requestAnimationFrame(animateDog);
+</script>
 </body>
 </html>
