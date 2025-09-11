@@ -1,214 +1,266 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienvenida</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&family=Great+Vibes&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perrito juguetón — Fondo interactivo</title>
   <style>
+    /* --- Reset suave --- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
-      font-family: 'Quicksand', sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: #081c3a;
+      color: #dbeafe;
       overflow: hidden;
     }
 
-    .container {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 2s ease-in-out;
+    /* --- Fondo animado: azules con destellos rojizos-rosados --- */
+    .background {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1200px 800px at 10% 20%, rgba(23, 78, 166, 0.55), transparent 60%),
+        radial-gradient(900px 700px at 80% 30%, rgba(12, 58, 128, 0.6), transparent 65%),
+        radial-gradient(700px 600px at 40% 80%, rgba(18, 82, 158, 0.5), transparent 65%),
+        radial-gradient(600px 500px at 70% 70%, rgba(255, 95, 109, 0.08), transparent 70%),
+        radial-gradient(500px 400px at 25% 55%, rgba(255, 156, 187, 0.06), transparent 75%),
+        linear-gradient(180deg, #0a1e3f 0%, #06142b 100%);
+      filter: saturate(1.05) contrast(1.02);
+      animation: drift 22s ease-in-out infinite alternate;
     }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3em;
-      color: #3e4e5e;
-      margin-bottom: 0.2em;
-      text-align: center;
-      animation: slideDown 1.5s ease-out;
-    }
-
-    p {
-      font-size: 1.2em;
-      color: #6b4f3b;
-      max-width: 600px;
-      text-align: center;
-      animation: fadeInText 2.5s ease-in;
-    }
-
-    .wave {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 200px;
-      background: url('https://svgshare.com/i/uJv.svg') repeat-x;
-      animation: waveMove 10s linear infinite;
-      opacity: 0.3;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeInText {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes waveMove {
-      0% { background-position-x: 0; }
-      100% { background-position-x: 1000px; }
-    }
-
-    audio {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-    }
-
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(3px);
-    }
-
-    .button-container {
-      margin-top: 20px;
-      z-index: 2;
-    }
-
-    #magicBtn {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #ff6f91, #ffc3a0);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 111, 145, 0.6);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    #magicBtn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(255, 111, 145, 0.9);
-    }
-
-    #explosionCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    /* Sutiles “chispas” rojizas/rosadas */
+    .twinkles {
+      position: fixed;
+      inset: 0;
       pointer-events: none;
-      z-index: 1;
+      background-image:
+        radial-gradient(3px 3px at 20% 40%, rgba(255,105,135,0.35), transparent 50%),
+        radial-gradient(2px 2px at 35% 25%, rgba(255,155,175,0.3), transparent 50%),
+        radial-gradient(2px 2px at 60% 55%, rgba(255,135,155,0.28), transparent 50%),
+        radial-gradient(3px 3px at 75% 35%, rgba(255,120,150,0.32), transparent 50%),
+        radial-gradient(2px 2px at 50% 75%, rgba(255,150,170,0.3), transparent 50%);
+      animation: twinkle 5.6s ease-in-out infinite;
+      mix-blend-mode: screen;
     }
 
-    #finalMessage {
+    @keyframes drift {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(0, -2%, 0) scale(1.02); }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.35; filter: blur(0.2px); }
+      50%      { opacity: 0.6;  filter: blur(0.6px); }
+    }
+
+    /* --- Contenedor principal --- */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      isolation: isolate;
+    }
+
+    /* --- Perrito emoji --- */
+    .dog {
       position: absolute;
+      left: -10vmin; /* empieza fuera de pantalla a la izquierda */
       top: 50%;
-      left: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8em;
-      color: #ff6f91;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      font-size: clamp(32px, 6vmin, 64px);
+      line-height: 1;
+      user-select: none;
+      will-change: transform, left, top;
+      text-shadow:
+        0 0 0.5px rgba(255,255,255,0.2),
+        0 0 6px rgba(255,255,255,0.06);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+    }
+
+    /* --- Globo de pensamiento "(tócame)" --- */
+    .thought {
+      position: absolute;
+      transform: translate(-50%, -120%);
+      background: rgba(245, 248, 255, 0.9);
+      color: #0a1a33;
+      padding: 0.5rem 0.7rem;
+      border-radius: 12px;
+      border: 1px solid rgba(10, 26, 51, 0.35); /* borde fino */
+      font-size: clamp(12px, 2.8vmin, 16px);
+      box-shadow:
+        0 1px 0.5px rgba(255,255,255,0.35) inset,
+        0 6px 18px rgba(0, 0, 0, 0.22);
       opacity: 0;
-      transition: opacity 2s ease-in;
-      z-index: 3;
-      max-width: 80%;
+      pointer-events: none;
+      transition: opacity 600ms ease, transform 600ms ease;
+      cursor: pointer;
+    }
+    .thought::after,
+    .thought::before {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(245, 248, 255, 0.9);
+      border: 1px solid rgba(10, 26, 51, 0.25);
+    }
+    .thought::after {
+      width: 8px; height: 8px;
+      left: 12px; bottom: -10px;
+    }
+    .thought::before {
+      width: 5px; height: 5px;
+      left: 6px; bottom: -18px;
+    }
+    .thought.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -125%) scale(1.02);
+      animation: gentlePulse 2s ease-in-out infinite;
+    }
+    @keyframes gentlePulse {
+      0%,100% { box-shadow: 0 1px 0.5px rgba(255,255,255,0.35) inset, 0 6px 18px rgba(0,0,0,0.22); }
+      50%     { box-shadow: 0 1px 0.5px rgba(255,255,255,0.4) inset, 0 10px 26px rgba(0,0,0,0.28); }
+    }
+
+    /* --- Oscurecimiento tierno de pantalla --- */
+    .veil {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(120vmax 120vmax at 50% 50%, rgba(6, 12, 24, 0.0), rgba(0, 0, 0, 0.0) 60%, rgba(0, 0, 0, 0.0) 100%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1800ms ease-in-out; /* lento y tierno */
+      z-index: 10;
+    }
+    .veil.dark {
+      opacity: 0.88; /* no totalmente negro, suave */
+      background: radial-gradient(160vmax 130vmax at 50% 55%, rgba(10, 18, 28, 0.15), rgba(4, 8, 16, 0.6) 40%, rgba(0, 0, 0, 0.92) 100%);
+    }
+
+    /* Accesibilidad: reducir movimiento si el usuario lo prefiere */
+    @media (prefers-reduced-motion: reduce) {
+      .background, .twinkles { animation: none; }
+      .thought { transition: opacity 300ms ease; }
     }
   </style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <div class="container">
-    <h1>Bienvenida</h1>
-    <p>Una página pensada para ti, con calma, elegancia y un toque de magia. Que cada palabra aquí te abrace como lo haría tu libro favorito.</p>
-    <div class="button-container">
-      <button id="magicBtn">✨ Haz clic aquí</button>
-    </div>
-  </div>
-  <div class="wave"></div>
-  <canvas id="explosionCanvas"></canvas>
-  <div id="finalMessage">Eres increíble, hermosa e inteligente. Lo supe desde que te vi.</div>
+  <div class="background" aria-hidden="true"></div>
+  <div class="twinkles" aria-hidden="true"></div>
 
-  <audio autoplay loop>
-    <source src="https://example.com/tiroteo.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio.
-  </audio>
+  <main class="stage" aria-label="Escena con fondo y un perrito animado">
+    <span class="dog" id="dog" role="img" aria-label="perrito">🐶</span>
+    <button class="thought" id="thought" aria-label="Tócame para oscurecer la pantalla">(tócame)</button>
+  </main>
+
+  <div class="veil" id="veil" aria-hidden="true"></div>
 
   <script>
-    const canvas = document.getElementById('explosionCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Parámetros de animación
+    const dog = document.getElementById('dog');
+    const thought = document.getElementById('thought');
+    const veil = document.getElementById('veil');
 
-    let particles = [];
+    let startTime = null;
+    let showingThought = false;
+    let animationStarted = false;
 
-    function createParticles(x, y) {
-      for (let i = 0; i < 100; i++) {
-        particles.push({
-          x: x,
-          y: y,
-          radius: Math.random() * 5,
-          color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-          velocity: {
-            x: (Math.random() - 0.5) * 5,
-            y: (Math.random() - 0.5) * 5
-          },
-          alpha: 1
-        });
+    // Configuración del recorrido: de izquierda a derecha con "vuelta de caracol" (espiral amortiguada)
+    const duration = 6500; // ms que tarda en cruzar
+    const delay = 2000;    // ms antes de comenzar (2 segundos, como pediste)
+
+    // Función de interpolación suave
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    // Animación cuadro a cuadro
+    function animateDog(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      if (elapsed < delay) {
+        requestAnimationFrame(animateDog);
+        return;
+      }
+      if (!animationStarted) {
+        animationStarted = true;
+      }
+
+      const tRaw = Math.min((elapsed - delay) / duration, 1);
+      const t = easeInOutCubic(tRaw);
+
+      // Ancho y alto del viewport
+      const vw = Math.max(window.innerWidth, 1);
+      const vh = Math.max(window.innerHeight, 1);
+
+      // Posición X: de -10% (fuera) a 105% (sale un poco a la derecha)
+      const x = (-0.10 + 1.15 * t) * vw;
+
+      // Movimiento "vuelta de caracol" (espiral amortiguada):
+      // Un lazo principal + ondulación decreciente
+      const centerY = vh * 0.55;
+      const amplitude = Math.min(vh * 0.22, 180);
+      const loops = 1.25; // ~una vuelta y un cuarto
+      const spiral = Math.sin(loops * 2 * Math.PI * t) * amplitude * (1 - 0.75 * t);
+      const wobble = Math.sin(10 * Math.PI * t) * amplitude * 0.08 * (1 - t);
+      const y = centerY + spiral + wobble;
+
+      // Ligera rotación para el gesto juguetón
+      const rotate = Math.sin(6 * Math.PI * t) * 12 * (1 - 0.6 * t);
+
+      dog.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+
+      // Mostrar el globo "(tócame)" antes de llegar a la derecha (entre 60% y 90%)
+      if (!showingThought && tRaw > 0.6 && tRaw < 0.9) {
+        showingThought = true;
+        // Posicionar el globo cerca del perrito
+        positionThoughtNearDog(x, y);
+        thought.classList.add('show');
+      }
+
+      // Seguir el perrito con el globo mientras se muestra
+      if (showingThought) {
+        positionThoughtNearDog(x, y);
+      }
+
+      if (tRaw < 1) {
+        requestAnimationFrame(animateDog);
+      } else {
+        // Al finalizar, ocultar el globo si no se tocó
+        if (thought.classList.contains('show')) {
+          thought.classList.remove('show');
+        }
       }
     }
 
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, i) => {
-        p.x += p.velocity.x;
-        p.y += p.velocity.y;
-        p.alpha -= 0.01;
-        if (p.alpha <= 0) particles.splice(i, 1);
-        ctx.globalAlpha = p.alpha;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.fill();
-      });
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(animateParticles);
+    function positionThoughtNearDog(x, y) {
+      // Desfase para ubicarse sobre el perrito con un pequeño offset
+      const offsetX = 24;
+      const offsetY = -40;
+      thought.style.left = `${x + offsetX}px`;
+      thought.style.top  = `${y + offsetY}px`;
     }
 
-    animateParticles();
+    // Interacción: al tocar/clic en "(tócame)", oscurecer suavemente toda la pantalla
+    function darkenScreen() {
+      veil.classList.add('dark');
+      veil.setAttribute('aria-hidden', 'false');
+      // Opcional: suavizar salida del globo
+      thought.classList.remove('show');
+    }
 
-    document.getElementById('magicBtn').addEventListener('click', () => {
-      createParticles(window.innerWidth / 2, window.innerHeight / 2);
-      const mensaje = document.getElementById('finalMessage');
-      mensaje.style.opacity = 1;
+    thought.addEventListener('click', darkenScreen, { passive: true });
+    thought.addEventListener('touchstart', darkenScreen, { passive: true });
 
-      setTimeout(() => {
-        mensaje.style.opacity = 0;
-      }, 10000); // 10 segundos
-    });
+    // Iniciar animación
+    requestAnimationFrame(animateDog);
 
+    // Responsivo: reajustar posición del globo al cambiar tamaño
     window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // No reiniciamos animación; solo dejamos que el siguiente frame recalcule
     });
   </script>
 </body>
