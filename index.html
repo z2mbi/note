@@ -3,111 +3,149 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Perrito al centro</title>
+<title>Perrito al centro con lluvia mágica</title>
 <style>
-  html, body {
-    margin: 0;
-    height: 100%;
-    background: #081c3a;
-    overflow: hidden;
-  }
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #081c3a;
+  overflow: hidden;
+}
 
-  /* Fondo azules + destellos */
-  .background {
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(1200px 800px at 10% 20%, rgba(23, 78, 166, 0.55), transparent 60%),
-      radial-gradient(900px 700px at 80% 30%, rgba(12, 58, 128, 0.6), transparent 65%),
-      radial-gradient(700px 600px at 40% 80%, rgba(18, 82, 158, 0.5), transparent 65%),
-      radial-gradient(600px 500px at 70% 70%, rgba(255, 95, 109, 0.08), transparent 70%),
-      radial-gradient(500px 400px at 25% 55%, rgba(255, 156, 187, 0.06), transparent 75%),
-      linear-gradient(180deg, #0a1e3f 0%, #06142b 100%);
-    animation: drift 22s ease-in-out infinite alternate;
-  }
-  @keyframes drift {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-2%); }
-  }
+/* Fondo azul con destellos */
+.background {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1200px 800px at 10% 20%, rgba(23, 78, 166, 0.55), transparent 60%),
+    radial-gradient(900px 700px at 80% 30%, rgba(12, 58, 128, 0.6), transparent 65%),
+    radial-gradient(700px 600px at 40% 80%, rgba(18, 82, 158, 0.5), transparent 65%),
+    radial-gradient(600px 500px at 70% 70%, rgba(255, 95, 109, 0.15), transparent 70%),
+    radial-gradient(500px 400px at 25% 55%, rgba(255, 156, 187, 0.12), transparent 75%),
+    linear-gradient(180deg, #0a1e3f 0%, #06142b 100%);
+  animation: drift 22s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2%); }
+}
 
-  .twinkles {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(3px 3px at 20% 40%, rgba(255,105,135,0.35), transparent 50%),
-      radial-gradient(2px 2px at 35% 25%, rgba(255,155,175,0.3), transparent 50%),
-      radial-gradient(2px 2px at 60% 55%, rgba(255,135,155,0.28), transparent 50%),
-      radial-gradient(3px 3px at 75% 35%, rgba(255,120,150,0.32), transparent 50%),
-      radial-gradient(2px 2px at 50% 75%, rgba(255,150,170,0.3), transparent 50%);
-    animation: twinkle 5.6s ease-in-out infinite;
-    mix-blend-mode: screen;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.6; }
-  }
+/* Lluvia mágica más visible */
+.rain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(transparent, transparent 18px, rgba(255,200,255,0.25) 19px),
+    repeating-linear-gradient(transparent, transparent 28px, rgba(255,150,200,0.2) 29px);
+  background-size: 200% 200%;
+  animation: rainMove 1.5s linear infinite;
+}
+@keyframes rainMove {
+  to { background-position: -50px 100%; }
+}
 
-  .stage {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  .dog {
-    position: absolute;
-    font-size: clamp(40px, 8vmin, 80px);
-    left: -10%;
-    top: 45%;
-    transform: translate(-50%, -50%);
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-    animation: wagTail 0.5s ease-in-out infinite alternate;
-  }
-  @keyframes wagTail {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(4deg); }
-  }
+.dog {
+  position: absolute;
+  font-size: clamp(40px, 8vmin, 80px);
+  left: -10%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+  animation: wagTail 0.5s ease-in-out infinite alternate;
+}
+@keyframes wagTail {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(4deg); }
+}
 
-  .thought {
-    position: absolute;
-    background: rgba(245, 248, 255, 0.9);
-    color: #0a1a33;
-    padding: 0.5rem 0.7rem;
-    border-radius: 12px;
-    border: 1px solid rgba(10, 26, 51, 0.35);
-    font-size: clamp(12px, 2.8vmin, 16px);
-    box-shadow: 0 1px 0.5px rgba(255,255,255,0.35) inset,
-                0 6px 18px rgba(0, 0, 0, 0.22);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 600ms ease;
-    cursor: pointer;
-  }
-  .thought.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
+/* Mensaje centrado */
+.thought {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(245, 248, 255, 0.9);
+  color: #0a1a33;
+  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid rgba(10, 26, 51, 0.35);
+  font-size: clamp(12px, 2.8vmin, 16px);
+  box-shadow: 0 1px 0.5px rgba(255,255,255,0.35) inset,
+              0 6px 18px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+  cursor: pointer;
+}
+.thought.show {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-  .veil {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(160vmax 130vmax at 50% 55%, rgba(10, 18, 28, 0.15), rgba(4, 8, 16, 0.6) 40%, rgba(0, 0, 0, 0.92) 100%);
-    opacity: 0;
-    transition: opacity 1800ms ease-in-out;
-    z-index: 10;
-  }
-  .veil.dark {
-    opacity: 0.88;
-  }
+/* Flechas centradas */
+.arrows {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.arrow {
+  position: absolute;
+  font-size: 1.5rem;
+  color: #fffa;
+  animation: pulse 1s infinite alternate;
+}
+.arrow:nth-child(1) { top: -40px; left: 50%; transform: translateX(-50%); }
+.arrow:nth-child(2) { bottom: -40px; left: 50%; transform: translateX(-50%); }
+.arrow:nth-child(3) { left: -40px; top: 50%; transform: translateY(-50%); }
+.arrow:nth-child(4) { right: -40px; top: 50%; transform: translateY(-50%); }
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+.arrows.show {
+  opacity: 1;
+}
+
+/* Oscurecimiento */
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(160vmax 130vmax at 50% 55%, rgba(10, 18, 28, 0.3), rgba(4, 8, 16, 0.7) 40%, rgba(0, 0, 0, 0.95) 100%);
+  opacity: 0;
+  transition: opacity 1800ms ease-in-out;
+}
+.veil.dark {
+  opacity: 1;
+}
+
+/* Rebote al llegar */
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(4deg); }
+  50% { transform: translate(-50%, -50%) translateY(-5px) rotate(4deg); }
+}
 </style>
 </head>
 <body>
 <div class="background"></div>
-<div class="twinkles"></div>
+<div class="rain"></div>
 
 <div class="stage">
   <span class="dog" id="dog">🐶</span>
   <button class="thought" id="thought">(tócame)</button>
+  <div class="arrows" id="arrows">
+    <span class="arrow">⬆</span>
+    <span class="arrow">⬇</span>
+    <span class="arrow">⬅</span>
+    <span class="arrow">➡</span>
+  </div>
 </div>
 
 <div class="veil" id="veil"></div>
@@ -116,10 +154,11 @@
 const dog = document.getElementById('dog');
 const thought = document.getElementById('thought');
 const veil = document.getElementById('veil');
+const arrows = document.getElementById('arrows');
 
 let startTime = null;
-const delay = 2000; // espera antes de iniciar
-const duration = 5000; // tiempo hasta el centro
+const delay = 2000;
+const duration = 5000;
 
 function easeOutElastic(t) {
   const c4 = (2 * Math.PI) / 3;
@@ -155,10 +194,14 @@ function animateDog(timestamp) {
   dog.style.top = `${y}px`;
 
   if (tRaw >= 1) {
-    // Mostrar mensaje justo al llegar al centro
+    // Cambia animación al llegar
+    dog.style.animation = 'wagTail 0.5s ease-in-out infinite alternate, bounce 1s ease infinite';
     thought.style.left = `${centerX}px`;
     thought.style.top = `${centerY - 80}px`;
     thought.classList.add('show');
+    arrows.style.left = `${centerX}px`;
+    arrows.style.top = `${centerY}px`;
+    arrows.classList.add('show');
   } else {
     requestAnimationFrame(animateDog);
   }
